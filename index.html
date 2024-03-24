@@ -68,18 +68,27 @@
   const buttonElement = document.getElementById('button');
 
   buttonElement.addEventListener("click", () => {
-    if (nameInputElement.value === "") {
-      nameInputElement.classList.add("error");
-      return;
-    } else {
-      nameInputElement.classList.remove("error");
-    }
-    if (textInputElement.value === "") {
-      textInputElement.classList.add("error");
-      return;
-    } else {
-      textInputElement.classList.remove("error");
-    };
+    let errorInName=nameInputElement.value.length <=2
+    let errorInComment=textInputElement.value.length<1
+    
+    if (errorInName || errorInComment) {
+    if (errorInName)
+        nameInputElement.classList.add("error")
+    else
+        nameInputElement.classList.remove("error")
+    
+    if (errorInComment)
+        textInputElement.classList.add("error")
+    else
+        textInputElement.classList.remove("error")
+
+        
+
+    return
+};
+
+
+    
     const oldList = listElement.innerHTML;
     listElement.innerHTML = oldList + `<li class="comment">
           <div class="comment-header">
@@ -100,8 +109,7 @@
         </li>`;
 
   });
-
-
+  
   const date = new Date();
   const day = date.getDate().toString().padStart(2, "0");
   const month = date.getMonth().toString().padStart(2, "0");
