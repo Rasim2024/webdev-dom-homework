@@ -68,8 +68,8 @@
   const buttonElement = document.getElementById('button');
 
   buttonElement.addEventListener("click", () => {
-    let errorInName=nameInputElement.value.length <=2
-    let errorInComment=textInputElement.value.length<1
+    let errorInName=nameInputElement.value.length <= 2
+    let errorInComment=textInputElement.value.length < 2
     
     if (errorInName || errorInComment) {
     if (errorInName)
@@ -107,6 +107,10 @@
             </div>
           </div>
         </li>`;
+        nameInputElement.classList.remove("error");
+        textInputElement.classList.remove("error");
+        nameInputElement.value=""
+        textInputElement.value=""
 
   });
   
