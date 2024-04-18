@@ -30,7 +30,7 @@
 
 <script>
   const nameInputElement = document.getElementById('name-input');
-  const textInputElement = document.getElementById('text-input');
+  const reviewInputElement = document.getElementById('text-input');
   const listElement = document.getElementById('list');
   const buttonElement = document.getElementById('button');
 
@@ -43,34 +43,66 @@
   const minutes = date.getMinutes().toString().padStart(2, "0");
   const formatToDate = `${day}.${month}.${year} ${hours}:${minutes}`;
 
-  const comments = [
+  function getComments() {
+    return fetch("https://wedev-api.sky.pro/api/v1/:rasim-musaev/comments", {
+      method: "GET"
+    })
+
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseData) => {
+        const appComments = responseData.comments.map((comment) => {
+          return {
+            name: comment.author.name,
+            time: new Date(comment.date).toLocaleDateString('ru-RU', { year: '2-digit', day: '2-digit', month: '2-digit' }) + ' ' + new Date(comment.date).toLocaleDateString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+            review: comment.text,
+            likeCount: comment.likes,
+            isLiked: false
+          };
+        });
+        database = appComments;
+        renderComments();
+
+      });
+
+  }
+
+  getComments();
+
+
+
+
+  let database = [
     {
       name: 'Глеб Фокин',
-      data: '12.02.22 12:18',
-      text: 'Это будет первый комментарий на этой странице',
+      time: '12.02.22 12:18',
+      review: 'Это будет первый комментарий на этой странице',
       isLiked: false,
       likeCount: 3,
     },
     {
-      name: 'Варвара Н.',
-      data: '13.02.22 19:22',
-      text: 'Мне нравится как оформлена эта страница! ❤',
+      name: 'Лариса Н.',
+      time: '13.02.22 19:22',
+      review: 'Мне нравится как оформлена эта страница! ❤',
       isLiked: true,
       likeCount: 75,
     },
   ];
 
+
+
   function renderComments() {
-    listElement.innerHTML = comments.map((comment, index) => {
+    listElement.innerHTML = database.map((comment, index) => {
       const classButton = comment.isLiked ? "-active-like" : ""
-      return `<li class="comment">
+      return `<li class="comment" data-index="${index}">
           <div class="comment-header">
             <div>${comment.name}</div>
-            <div>${comment.data}</div>
+            <div>${comment.time}</div>
           </div>
           <div class="comment-body">
-            <div class="comment-text">
-              ${comment.text}
+            <div class="comment-text" data-index="${index}" >
+              ${comment.review}
             </div>
           </div>
           <div class="comment-footer">
@@ -82,20 +114,58 @@
         </li>`
 
     }).join("");
+
     initEventListener();
+
+    // Задание 2.11
+    const replyComments = () => {
+      const answerComments = document.querySelectorAll('.comment');
+      for (const answer of answerComments) {
+        answer.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const index = answer.dataset.index;
+          console.log("index: ", index);
+          const reviewInputElement = document.getElementById('text-input');
+          reviewInputElement.value =
+            `${database[index].review}:  ${database[index].name} \n`;
+
+        });
+
+
+      }
+    };
+
+    replyComments();
+
+    //  2 вариант решения 
+    // const replyComments = document.querySelectorAll('.comment');
+    // replyComments.forEach((answer, i) => {
+
+    //   answer.addEventListener('click', (event) => {
+
+    //     const index = event.target.getAttribute('data-index');
+    //     console.log("index: ", index);
+    //     reviewInputElement.value = `> ${database[index].review}: ${database[index].name} \n `;
+    //     reviewInputElement.focus();
+    //   });
+    // });
+
   };
+  renderComments();
+
+
 
   function initEventListener() {
     const likeButtonElements = document.querySelectorAll('.like-button');
     for (const likeButtonElement of likeButtonElements) {
       likeButtonElement.addEventListener('click', () => {
         const index = likeButtonElement.dataset.index
-        if (comments[index].isLiked) {
-          comments[index].isLiked = !comments[index].isLiked
-          comments[index].likeCount--
+        if (database[index].isLiked) {
+          database[index].isLiked = !database[index].isLiked
+          database[index].likeCount--
         } else {
-          comments[index].isLiked = !comments[index].isLiked
-          comments[index].likeCount++
+          database[index].isLiked = !database[index].isLiked
+          database[index].likeCount++
         };
         renderComments();
 
@@ -108,7 +178,7 @@
 
   buttonElement.addEventListener("click", () => {
     let errorInName = nameInputElement.value.length <= 2
-    let errorInComment = textInputElement.value.length < 2
+    let errorInComment = reviewInputElement.value.length < 2
 
     if (errorInName || errorInComment) {
       if (errorInName)
@@ -117,17 +187,21 @@
         nameInputElement.classList.remove("error")
 
       if (errorInComment)
-        textInputElement.classList.add("error")
+        reviewInputElement.classList.add("error")
       else
-        textInputElement.classList.remove("error")
+        reviewInputElement.classList.remove("error")
 
       return
     };
 
-    comments.push({
-      name: nameInputElement.value,
-      data: formatToDate,
-      text: textInputElement.value,
+    const safeMode = (htmlString) => {
+      return htmlString.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("&", "&amp;").replaceAll('"', "&quot;");
+    };
+
+    database.push({
+      name: safeMode(nameInputElement.value),
+      time: formatToDate,
+      review: safeMode(reviewInputElement.value),
       isLiked: false,
       likeCount: 0,
 
@@ -136,14 +210,18 @@
     renderComments();
 
     nameInputElement.classList.remove("error");
-    textInputElement.classList.remove("error");
+    reviewInputElement.classList.remove("error");
     nameInputElement.value = ""
-    textInputElement.value = ""
+    reviewInputElement.value = ""
 
   });
 
   renderComments();
-  
+
+
+
+
 
 </script>
+
 </html>
