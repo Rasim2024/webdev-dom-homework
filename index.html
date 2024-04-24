@@ -43,6 +43,7 @@
   const minutes = date.getMinutes().toString().padStart(2, "0");
   const formatToDate = `${day}.${month}.${year} ${hours}:${minutes}`;
 
+// Выводим новый комментарий из сервера на страницу
   function getComments() {
     return fetch("https://wedev-api.sky.pro/api/v1/:rasim-musaev/comments", {
       method: "GET"
@@ -153,8 +154,6 @@
   };
   renderComments();
 
-
-
   function initEventListener() {
     const likeButtonElements = document.querySelectorAll('.like-button');
     for (const likeButtonElement of likeButtonElements) {
@@ -173,6 +172,8 @@
 
     };
   }
+
+
 
 
 
@@ -197,17 +198,32 @@
     const safeMode = (htmlString) => {
       return htmlString.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("&", "&amp;").replaceAll('"', "&quot;");
     };
+ // Сохранение комментариев на сервер
+    fetch("https://wedev-api.sky.pro/api/v1/:rasim-musaev/comments", {
+      method: "POST",
+      body: JSON.stringify({
+        text: safeMode(reviewInputElement.value),
+        name: safeMode(nameInputElement.value),
+        
+      }),
+    }).then((response) => {
+      response.json();
+    }).then(() => {
+      // Выводим новый комментарий из сервера на страницу
+      return getComments();
+    })
+    
 
-    database.push({
-      name: safeMode(nameInputElement.value),
-      time: formatToDate,
-      review: safeMode(reviewInputElement.value),
-      isLiked: false,
-      likeCount: 0,
+    // database.push({
+    //   name: safeMode(nameInputElement.value),
+    //   time: formatToDate,
+    //   review: safeMode(reviewInputElement.value),
+    //   isLiked: false,
+    //   likeCount: 0,
 
-    }
-    );
-    renderComments();
+    // }
+    // );
+    // renderComments();
 
     nameInputElement.classList.remove("error");
     reviewInputElement.classList.remove("error");
