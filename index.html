@@ -8,7 +8,16 @@
 </head>
 
 <body>
+
   <div class="container">
+    <!-- preloader -->
+    <div id="preloader" class="">
+      <div class="loadingio-spinner-rolling-nq4q5u6dq7r">
+        <div class="ldio-x2uulkbinbj">
+          <div></div>
+        </div>
+      </div>
+    </div>
     <ul class="comments" id="list">
       <!-- Массив из JS -->
     </ul>
@@ -33,6 +42,8 @@
   const reviewInputElement = document.getElementById('text-input');
   const listElement = document.getElementById('list');
   const buttonElement = document.getElementById('button');
+  const baseURL = new URL("https://wedev-api.sky.pro/api/v1/:rasim-musaev/comments");
+  const loaderElement = document.getElementById('preloader')
 
 
   const date = new Date();
@@ -43,20 +54,22 @@
   const minutes = date.getMinutes().toString().padStart(2, "0");
   const formatToDate = `${day}.${month}.${year} ${hours}:${minutes}`;
 
-// Выводим новый комментарий из сервера на страницу
+  // Выводим новый комментарий из сервера на страницу
   function getComments() {
-    return fetch("https://wedev-api.sky.pro/api/v1/:rasim-musaev/comments", {
+    return fetch(baseURL, {
       method: "GET"
     })
 
       .then((response) => {
+
         return response.json();
       })
       .then((responseData) => {
+        loaderElement.remove(); //Удаляем лоадер после загрузки данных
         const appComments = responseData.comments.map((comment) => {
           return {
             name: comment.author.name,
-            time: new Date(comment.date).toLocaleDateString('ru-RU', { year: '2-digit', day: '2-digit', month: '2-digit' }) + ' ' + new Date(comment.date).toLocaleDateString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+            time: new Date(comment.date).toLocaleDateString('ru-RU', { year: '2-digit', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
             review: comment.text,
             likeCount: comment.likes,
             isLiked: false
@@ -71,24 +84,21 @@
 
   getComments();
 
-
-
-
   let database = [
-    {
-      name: 'Глеб Фокин',
-      time: '12.02.22 12:18',
-      review: 'Это будет первый комментарий на этой странице',
-      isLiked: false,
-      likeCount: 3,
-    },
-    {
-      name: 'Лариса Н.',
-      time: '13.02.22 19:22',
-      review: 'Мне нравится как оформлена эта страница! ❤',
-      isLiked: true,
-      likeCount: 75,
-    },
+    // {
+    //   name: 'Глеб Фокин',
+    //   time: '12.02.22 12:18',
+    //   review: 'Это будет первый комментарий на этой странице',
+    //   isLiked: false,
+    //   likeCount: 3,
+    // },
+    // {
+    //   name: 'Лариса Н.',
+    //   time: '13.02.22 19:22',
+    //   review: 'Мне нравится как оформлена эта страница! ❤',
+    //   isLiked: true,
+    //   likeCount: 75,
+    // },
   ];
 
 
@@ -120,7 +130,7 @@
 
     // Задание 2.11
     const replyComments = () => {
-      const answerComments = document.querySelectorAll('.comment');
+      const answerComments = document.querySelectorAll(".comment");
       for (const answer of answerComments) {
         answer.addEventListener('click', (event) => {
           event.stopPropagation();
@@ -152,12 +162,12 @@
     // });
 
   };
-  renderComments();
 
   function initEventListener() {
     const likeButtonElements = document.querySelectorAll('.like-button');
     for (const likeButtonElement of likeButtonElements) {
-      likeButtonElement.addEventListener('click', () => {
+      likeButtonElement.addEventListener('click', (event) => {
+        event.stopPropagation();
         const index = likeButtonElement.dataset.index
         if (database[index].isLiked) {
           database[index].isLiked = !database[index].isLiked
@@ -198,21 +208,42 @@
     const safeMode = (htmlString) => {
       return htmlString.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("&", "&amp;").replaceAll('"', "&quot;");
     };
- // Сохранение комментариев на сервер
-    fetch("https://wedev-api.sky.pro/api/v1/:rasim-musaev/comments", {
+    buttonElement.disabled = true;
+    buttonElement.textContent = 'Комментарий добавляется...';
+    // Сохранение комментариев на сервер
+    fetch(baseURL, {
       method: "POST",
       body: JSON.stringify({
         text: safeMode(reviewInputElement.value),
         name: safeMode(nameInputElement.value),
-        
+
       }),
-    }).then((response) => {
-      response.json();
-    }).then(() => {
-      // Выводим новый комментарий из сервера на страницу
-      return getComments();
     })
-    
+      .then((response) => {
+        console.log(response);
+        if (response.status === 201) {
+          return response.json();
+        }
+        if (response.status === 400) {
+                throw new Error("Неверный запрос"); 
+            //   return Promise.reject(new Error("Неверный запрос"));
+            }
+            if (response.status === 500) {
+              throw new Error("Сервер упал");
+            //   return Promise.reject(new Error("Сервер упал"));
+            }
+      })
+      .then(() => {
+        // Выводим новый комментарий из сервера на страницу
+        return getComments();
+      })
+      .then(() => {
+        buttonElement.disabled = false
+        buttonElement.textContent = 'Написать'
+      })
+
+      
+
 
     // database.push({
     //   name: safeMode(nameInputElement.value),
@@ -231,10 +262,6 @@
     reviewInputElement.value = ""
 
   });
-
-  renderComments();
-
-
 
 
 
