@@ -55,11 +55,19 @@
     return fetch(baseURL, {
       method: "GET"
     })
+    .then((response) => {
+          console.log(response);
+          if (response.status === 200) {
+            return response.json();
+          }
+          
+          if (response.status === 500) {
+            throw new Error("Сервер упал");
+            //   return Promise.reject(new Error("Сервер упал"));
+          }
+        })
 
-      .then((response) => {
-
-        return response.json();
-      })
+      
       .then((responseData) => {
         loaderElement.remove(); //Удаляем лоадер после загрузки данных
         const appComments = responseData.comments.map((comment) => {
@@ -74,7 +82,21 @@
         database = appComments;
         renderComments();
 
-      });
+      })
+      
+      .catch((error) => {
+          buttonElement.disabled = false;
+          buttonElement.textContent = "Написать";
+          if (error.message === "Сервер упал") {
+            alert("Кажется, что-то пошло не так, попробуй позже");
+
+          } if (error.message === 'Failed to fetch') {
+            alert("Кажется,сломался интернет, попробуй позже");
+          }
+          // TODO: Отправлять в систему сбора ошибок
+          console.warn(error);
+          
+        });
 
   }
 
@@ -254,8 +276,6 @@
           // TODO: Отправлять в систему сбора ошибок
           console.warn(error);
           
-
-
         });
 
 
