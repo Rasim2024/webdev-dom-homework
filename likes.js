@@ -1,4 +1,4 @@
-import { database } from "./main.js";
+import { database } from "./request.js";
 import { renderComments } from "./render.js";
 
 

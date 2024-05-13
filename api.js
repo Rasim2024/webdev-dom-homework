@@ -2,7 +2,7 @@
 import { nameInputElement } from "./main.js";
 import { reviewInputElement } from "./main.js";
 import { baseURL } from "./main.js";
-import { safeMode } from "./security.js";
+import { safeMode } from "./helpers.js";
 
 
 

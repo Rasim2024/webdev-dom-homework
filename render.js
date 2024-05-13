@@ -1,7 +1,7 @@
 import { listElement } from "./main.js";
 import { replyComments } from "./reply-comments.js";
 import { controlLikes } from "./likes.js";
-import { database } from "./main.js";
+import { database } from "./request.js";
 
 export function renderComments() {
     listElement.innerHTML = database.map((comment, index) => {
