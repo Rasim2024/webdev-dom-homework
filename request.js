@@ -8,6 +8,7 @@ import { reviewInputElement } from "./main.js";
 
 
 export let database = [];
+
 export function getComments() {
     apiGetComments()
         .then((responseData) => {

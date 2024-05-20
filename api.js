@@ -5,12 +5,29 @@ import { baseURL } from "./main.js";
 import { safeMode } from "./helpers.js";
 
 
+export let token = localStorage.getItem("token");
+console.log(token);
+export const setToken = (newToken) => {
+  token = newToken;
+};
 
+export const getToken = () => {
+  return token;
+};
 
-export function apiGetComments() {
+export async function apiGetComments() {
     return fetch(baseURL, {
-        method: "GET"
-    })
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    }).then((response) => {
+        if (response.status === 401) {
+          throw new Error("Вы не авторизованы");
+        }
+        return response.json();
+      })
+    
         .then((response) => {
             console.log(response);
             if (response.status === 200) {
@@ -24,9 +41,12 @@ export function apiGetComments() {
         });
 };
 
-export function apiPostComments() {
+export async function apiPostComments() {
    return fetch(baseURL, {
         method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+          },
         body: JSON.stringify({
             text: safeMode(reviewInputElement.value),
             name: safeMode(nameInputElement.value),
@@ -49,4 +69,31 @@ export function apiPostComments() {
             }
         });
 };
+
+export async function  loginPost({ login, password }) {
+    return fetch(urlApiLogin, {
+      method: "POST",
+      body: JSON.stringify({
+        login,
+        password,
+      }),
+    })
+      .then((response) => {
+        if (response.status === 201) {
+          console.log("комменты отрисовались?");
+          return response.json();
+        }
+        if (response.status === 400) {
+          throw new Error("Некорректные логинпароль 400");
+        }
+        if (response.status === 500) {
+          return Promise.reject("ошибка сервера");
+        }
+        return Promise.reject("Отсутствует соединение");
+      })
+      .catch((error) => {
+        alert(error);
+        console.warn(error);
+      });
+  }
 

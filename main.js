@@ -11,7 +11,10 @@ export const urlApiLogin = new URL("https://wedev-api.sky.pro/api/user/login")
 
 export const loaderElement = document.getElementById('preloader')
 
-
+export let user = JSON.parse(localStorage.getItem("user"));
+export const setUser = (newUser) => {
+  user = newUser;
+};
 
 // Выводим новый комментарий из сервера на страницу
 
