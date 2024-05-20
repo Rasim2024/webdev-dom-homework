@@ -25,20 +25,18 @@ export async function apiGetComments() {
         if (response.status === 401) {
           throw new Error("Вы не авторизованы");
         }
-        return response.json();
+                if (response.status === 200) {
+            return response.json();
+        }
+
+        if (response.status === 500) {
+            throw new Error("Сервер упал");
+            //   return Promise.reject(new Error("Сервер упал"));
+        }
+
       })
     
-        .then((response) => {
-            console.log(response);
-            if (response.status === 200) {
-                return response.json();
-            }
-
-            if (response.status === 500) {
-                throw new Error("Сервер упал");
-                //   return Promise.reject(new Error("Сервер упал"));
-            }
-        });
+       
 };
 
 export async function apiPostComments() {

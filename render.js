@@ -36,9 +36,9 @@ export function renderComments() {
     <a id="render-login-btn">авторизуйтесь</a> </p>`;
 
     if (!token)
-      return `<ul id="comments" class="comments">${listElement}</ul>
+      return `<ul id="comments" class="comments">${listElement.innerHTML}</ul>
      ${btnLogin}`;
-    return `<ul id="comments" class="comments">${listElement}</ul>
+    return `<ul id="comments" class="comments">${listElement.innerHTML}</ul>
     <div id="add-form" class="add-form">
       <input id="add-name" type="text" class="add-form-name" placeholder="Введите ваше имя" />
       <textarea id="add-text" type="textArea" class="add-form-text" placeholder="Введите ваш коментарий"
@@ -76,8 +76,8 @@ export function renderComments() {
     setLoginBtn();
     exit();
 
-    // controlLikes();
-    // replyComments();
+    controlLikes();
+    replyComments();
 
     
 

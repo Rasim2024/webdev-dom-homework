@@ -1,4 +1,4 @@
-import { loginPost, setToken  } from "./api";
+import { loginPost, setToken  } from "./api.js";
 import { setUser } from "./main.js";
 import { getComments } from "./request.js";
 import { renderRegisterForm } from "./renderRegisterForm.js";
