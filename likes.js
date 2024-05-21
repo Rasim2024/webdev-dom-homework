@@ -1,5 +1,6 @@
 import { database } from "./request.js";
 import { renderComments } from "./render.js";
+import { token } from "./api.js";
 
 
 export function controlLikes() {
@@ -7,6 +8,10 @@ export function controlLikes() {
     for (const likeButtonElement of likeButtonElements) {
         likeButtonElement.addEventListener('click', (event) => {
             event.stopPropagation();
+            if (!token) {
+                alert("autorize");
+                return;
+              }
             const index = likeButtonElement.dataset.index
             if (database[index].isLiked) {
                 database[index].isLiked = !database[index].isLiked
@@ -16,6 +21,7 @@ export function controlLikes() {
                 database[index].likeCount++
             };
             renderComments();
+            controlLikes()
 
         });
 

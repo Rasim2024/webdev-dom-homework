@@ -25,7 +25,7 @@ export const renderLoginForm = () => {
           />
           </div>
           <button id="login-form-button" class="add-form-button">Войти</button>
-          <button id="register-button" class="register-button" href="#">Зарегистрироваться</button>
+          <button  id="register-button" class="register-button">Зарегистрироваться</button>
         </div>
       </div>`;
     appHtml.innerHTML = loginHtml;
@@ -34,6 +34,7 @@ export const renderLoginForm = () => {
     const buttonLoginElement = document.getElementById("login-form-button");
     const loginInputElement = document.getElementById("login-input");
     const passwordInputElement = document.getElementById("password-input");
+    const registerButtonElement = document.getElementById("register-button");
 
     buttonLoginElement.addEventListener("click", (event) => {
         event.preventDefault();
@@ -56,5 +57,9 @@ export const renderLoginForm = () => {
                 getComments();
             });
     });
-    renderRegisterForm();
+    
+    registerButtonElement.addEventListener("click", () => {
+
+        renderRegisterForm()
+    });
 };

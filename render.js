@@ -7,9 +7,9 @@ import { renderLoginForm } from "./renderLoginForm.js";
 
 export function renderComments() {
   const appHtml = document.getElementById("app");
-    listElement.innerHTML = database.map((comment, index) => {
-        const classButton = comment.isLiked ? "-active-like" : ""
-        return `<li class="comment" data-index="${index}">
+  listElement.innerHTML = database.map((comment, index) => {
+    const classButton = comment.isLiked ? "-active-like" : ""
+    return `<li class="comment" data-index="${index}">
           <div class="comment-header">
             <div>${comment.name}</div>
             <div>${comment.time}</div>
@@ -27,9 +27,9 @@ export function renderComments() {
           </div>
         </li>`
 
-    }).join("");
+  }).join("");
 
-    //Форма ввода комментария
+  //Форма ввода комментария
   const contentHtml = () => {
     const btnLogin = `
     <p class="render-login-btn style-autorisation" >  Чтобы добавить комментарий, 
@@ -62,23 +62,23 @@ export function renderComments() {
     });
   }
 
-    //Переход к форме авторизации по клику
-    const setLoginBtn = () => {
-      const buttonLoginElement = document.getElementById("render-login-btn");
-      if (!buttonLoginElement) {
-        return;
-      }
-      buttonLoginElement.addEventListener("click", (event) => {
-        event.preventDefault();
-        renderLoginForm();
-      });
-    };
-    setLoginBtn();
-    exit();
+  //Переход к форме авторизации по клику
+  const setLoginBtn = () => {
+    const buttonLoginElement = document.getElementById("render-login-btn");
+    if (!buttonLoginElement) {
+      return;
+    }
+    buttonLoginElement.addEventListener("click", (event) => {
+      event.preventDefault();
+      renderLoginForm();
+    });
+  };
+  setLoginBtn();
+  exit();
 
-    controlLikes();
-    replyComments();
+  controlLikes();
+  replyComments();
 
-    
+
 
 };

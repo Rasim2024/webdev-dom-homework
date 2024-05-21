@@ -1,4 +1,5 @@
 import { database } from "./request.js";
+import { reviewInputElement } from "./main.js";
 
 export const replyComments = () => {
     const answerComments = document.querySelectorAll(".comment");
@@ -7,7 +8,7 @@ export const replyComments = () => {
             event.stopPropagation();
             const index = answer.dataset.index;
             console.log("index: ", index);
-            const reviewInputElement = document.getElementById('text-input');
+            // const reviewInputElement = document.getElementById('text-input');
             reviewInputElement.value =
                 `${database[index].review}:  ${database[index].name} \n`;
 

@@ -1,9 +1,11 @@
-import { loginPost, setToken } from "./api.js";
+import { setToken, } from "./api.js";
 import { setUser } from "./main.js";
-import { getComments } from "./request.js";
+import { renderLoginForm, } from "./renderLoginForm.js";
+import { register } from "./api.js";
+// import { renderRegisterForm } from "./request.js";
 
-
-
+export const loginInputElement = document.getElementById("login-input");
+export const passwordInputElement = document.getElementById("password-input");
 
 export const renderRegisterForm = () => {
     const registerAppHtml = document.getElementById("app");
@@ -17,32 +19,45 @@ export const renderRegisterForm = () => {
         <input type="text" id="password-input" class="add-form-input" placeholder="Пароль" />
       </div>
       <br />
-      <button class="add-form-login-button" id="register-button">Зарегистрироваться</button>
+      <button  id="register-button" class="register-button">Зарегистрироваться</button>
       <br />
-      <a href="index.html" class="link">Войти</a>
+      <button id="login-form-button" class="add-form-button">Войти</button>
     </div>
     </div>`;
     registerAppHtml.innerHTML = registerHtml;
+
+    const buttonLoginElement = document.getElementById("login-form-button");
     const registerButtonElement = document.getElementById("register-button");
     const nameInnputElement = document.getElementById("name-input");
     const loginInputElement = document.getElementById("login-input");
-    const passwordInputElement = document.getElementById("password-input");
+    const passwordInputElement = document.getElementById("password-input")
+
+
 
     registerButtonElement.addEventListener("click", () => {
-        if (!loginInputElement.value || !passwordInputElement.value || !nameInputElement.value) {
+        if (!loginInputElement.value || !passwordInputElement.value || !nameInnputElement.value) {
+            console.log(passwordInputElement.value);
             alert("Проверьте оба поля  на заполненность");
             return
-          }
+            
+        }
         register({
             name: nameInnputElement.value,
             login: loginInputElement.value,
             password: passwordInputElement.value,
-        }).then((responseData) => {
-            setUser(responseData.user.name);
-            setToken(responseData.user.setToken)
-            console.log(responseData.user.name);
-            console.log(setToken);
-        });
+        })
+            .then((responseData) => {
+                setUser(responseData.user.name);
+                setToken(responseData.user.setToken)
+                console.log(responseData.user.name);
+                console.log(setToken);
+                renderLoginForm();
+            });
     });
-    renderRegisterForm();
-}
+
+    buttonLoginElement.addEventListener("click", () => {
+
+        renderLoginForm()
+    });
+};
+

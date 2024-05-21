@@ -1,12 +1,14 @@
 
 import { nameInputElement } from "./main.js";
 import { reviewInputElement } from "./main.js";
-import { baseURL } from "./main.js";
+import { baseURL,urlApiLogin } from "./main.js";
 import { safeMode } from "./helpers.js";
 
 
+
+
 export let token = localStorage.getItem("token");
-console.log(token);
+// console.log(token);
 export const setToken = (newToken) => {
   token = newToken;
 };
@@ -93,5 +95,36 @@ export async function  loginPost({ login, password }) {
         alert(error);
         console.warn(error);
       });
-  }
+  };
+
+  export async function  register({ name, login, password }) {
+    return fetch(urlApiLogin, {
+      method: "POST",
+      body: JSON.stringify({
+        name,
+        login,
+        password,
+      }),
+    })
+      .then((response) => {
+        // console.log(response);
+        if (response.status === 201) {
+          console.log("авторизация?");
+          return response.json();
+        }
+        if (response.status === 400) {
+          throw new Error("Некорректные логинпароль 400");
+        }
+        if (response.status === 500) {
+          return Promise.reject("ошибка сервера");
+        }
+        return Promise.reject("Отсутствует соединение");
+      })
+      .catch((error) => {
+        alert(error);
+        console.warn(error);
+      });
+  };
+
+  
 
