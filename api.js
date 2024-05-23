@@ -1,7 +1,6 @@
 
-import { nameInputElement } from "./main.js";
-import { reviewInputElement } from "./main.js";
-import { baseURL,urlApiLogin } from "./main.js";
+import {  baseURL,urlApiLogin } from "./main.js";
+
 import { safeMode } from "./helpers.js";
 
 
@@ -41,7 +40,7 @@ export async function apiGetComments() {
        
 };
 
-export async function apiPostComments() {
+export async function apiPostComments(nameInputElement, reviewInputElement) {
    return fetch(baseURL, {
         method: "POST",
         headers: {

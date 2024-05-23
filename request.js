@@ -1,15 +1,13 @@
 import { renderComments } from "./render.js";
-import { apiGetComments } from "./api.js";
-import { buttonElement } from "./main.js";
+import { apiGetComments, token } from "./api.js";
 import { loaderElement } from "./main.js";
 import { apiPostComments } from "./api.js";
-import { nameInputElement } from "./main.js";
-import { reviewInputElement } from "./main.js";
+
 
 
 export let database = [];
 
-export function getComments() {
+export async function getComments() {
     apiGetComments()
         .then((responseData) => {
             loaderElement.remove(); //Удаляем лоадер после загрузки данных
@@ -27,8 +25,11 @@ export function getComments() {
 
         })
         .catch((error) => {
-            buttonElement.disabled = false;
-            buttonElement.textContent = "Написать";
+            if (token) {
+                const publishButton = document.getElementById("add-form-button");
+                publishButton.disabled = false;
+                publishButton.textContent = "Написать";
+            }
             if (error.message === "Сервер упал") {
                 alert("Кажется, что-то пошло не так, попробуй позже");
 
@@ -43,22 +44,25 @@ export function getComments() {
 };
 
 export const postComments = () => {
-    apiPostComments()
+    const nameInputElement = document.getElementById("name-input");
+    const reviewInputElement = document.getElementById("text-input");
+    const publishButton = document.getElementById("add-form-button");
+    apiPostComments(nameInputElement, reviewInputElement)
         .then(() => {
             // Выводим новый комментарий из сервера на страницу
             return getComments();
         })
         .then(() => {
-            buttonElement.disabled = false
-            buttonElement.textContent = 'Написать';
+            publishButton.disabled = false
+            publishButton.textContent = 'Написать';
 
             nameInputElement.value = ""
             reviewInputElement.value = ""
 
         })
         .catch((error) => {
-            buttonElement.disabled = false;
-            buttonElement.textContent = "Написать";
+            publishButton.disabled = false;
+            publishButton.textContent = "Написать";
             if (error.message === "Неверный запрос") {
                 alert("Имя и комментарий должны быть не короче 3 символов");
             } else if (error.message === "Сервер упал") {

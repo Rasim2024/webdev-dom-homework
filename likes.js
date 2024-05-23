@@ -21,7 +21,7 @@ export function controlLikes() {
                 database[index].likeCount++
             };
             renderComments();
-            controlLikes()
+            
 
         });
 
