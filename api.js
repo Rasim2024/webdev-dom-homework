@@ -1,5 +1,5 @@
 
-import {  baseURL,urlApiLogin } from "./main.js";
+import {  baseURL,urlApiLogin, urlApiuser } from "./main.js";
 
 import { safeMode } from "./helpers.js";
 
@@ -97,7 +97,8 @@ export async function  loginPost({ login, password }) {
   };
 
   export async function  register({ name, login, password }) {
-    return fetch(urlApiLogin, {
+    console.log(name, login, password);
+    return fetch(urlApiuser, {
       method: "POST",
       body: JSON.stringify({
         name,

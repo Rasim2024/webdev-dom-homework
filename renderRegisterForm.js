@@ -4,8 +4,7 @@ import { renderLoginForm, } from "./renderLoginForm.js";
 import { register } from "./api.js";
 // import { renderRegisterForm } from "./request.js";
 
-export const loginInputElement = document.getElementById("login-input");
-export const passwordInputElement = document.getElementById("password-input");
+
 
 export const renderRegisterForm = () => {
     const registerAppHtml = document.getElementById("app");
@@ -28,18 +27,19 @@ export const renderRegisterForm = () => {
 
     const buttonLoginElement = document.getElementById("login-form-button");
     const registerButtonElement = document.getElementById("register-button");
-    const nameInnputElement = document.getElementById("name-input");
-    const loginInputElement = document.getElementById("login-input");
-    const passwordInputElement = document.getElementById("password-input")
+
 
 
 
     registerButtonElement.addEventListener("click", () => {
+        const nameInnputElement = document.getElementById("name-input");
+        const loginInputElement = document.getElementById("login-input");
+        const passwordInputElement = document.getElementById("password-input");
         if (!loginInputElement.value || !passwordInputElement.value || !nameInnputElement.value) {
-            console.log(passwordInputElement.value);
+            
             alert("Проверьте оба поля  на заполненность");
             return
-            
+
         }
         register({
             name: nameInnputElement.value,
@@ -48,10 +48,10 @@ export const renderRegisterForm = () => {
         })
             .then((responseData) => {
                 setUser(responseData.user.name);
-                setToken(responseData.user.setToken)
+                setToken(responseData.user.setToken);
                 console.log(responseData.user.name);
                 console.log(setToken);
-                renderLoginForm();
+                // renderLoginForm();
             });
     });
 
