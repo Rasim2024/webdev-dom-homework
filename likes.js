@@ -9,7 +9,7 @@ export function controlLikes() {
         likeButtonElement.addEventListener('click', (event) => {
             event.stopPropagation();
             if (!token) {
-                alert("autorize");
+                // alert("autorize");
                 return;
               }
             const index = likeButtonElement.dataset.index

@@ -2,10 +2,10 @@ import { setToken, } from "./api.js";
 import { setUser } from "./main.js";
 import { renderLoginForm, } from "./renderLoginForm.js";
 import { register } from "./api.js";
-// import { renderRegisterForm } from "./request.js";
+import { successfully } from "./helpers.js";
 
 
-
+// Рендер функция страницы регистрации 
 export const renderRegisterForm = () => {
     const registerAppHtml = document.getElementById("app");
     const registerHtml = `
@@ -20,7 +20,7 @@ export const renderRegisterForm = () => {
       <br />
       <button  id="register-button" class="register-button">Зарегистрироваться</button>
       <br />
-      <button id="login-form-button" class="add-form-button">Войти</button>
+      <button id="login-form-button" class="render-login-btn">Войти</button>
     </div>
     </div>`;
     registerAppHtml.innerHTML = registerHtml;
@@ -30,7 +30,7 @@ export const renderRegisterForm = () => {
 
 
 
-
+// Функция при нажатии на кнопку регистрации 
     registerButtonElement.addEventListener("click", () => {
         const nameInnputElement = document.getElementById("name-input");
         const loginInputElement = document.getElementById("login-input");
@@ -41,7 +41,7 @@ export const renderRegisterForm = () => {
             return
 
         }
-        register({
+        register({ //Функция регистрации пользователя
             name: nameInnputElement.value,
             login: loginInputElement.value,
             password: passwordInputElement.value,
@@ -51,7 +51,9 @@ export const renderRegisterForm = () => {
                 setToken(responseData.user.setToken);
                 console.log(responseData.user.name);
                 console.log(setToken);
-                // renderLoginForm();
+                successfully();  // Функция уведомления пользователя 
+                renderLoginForm();  // Переход на страницы авторизации 
+
             });
     });
 

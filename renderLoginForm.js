@@ -25,7 +25,7 @@ export const renderLoginForm = () => {
           />
           </div>
           <button id="login-form-button" class="add-form-button">Войти</button>
-          <button  id="register-button" class="register-button">Зарегистрироваться</button>
+          <button  id="register-button" class="render-register-button">Зарегистрироваться</button>
         </div>
       </div>`;
     appHtml.innerHTML = loginHtml;

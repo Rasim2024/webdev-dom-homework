@@ -6,7 +6,7 @@ import { apiPostComments } from "./api.js";
 
 
 export let database = [];
-
+//Функция запроса с использованием функ апи и с обработкой ошибок для вывода на экран комментов 
 export async function getComments() {
     apiGetComments()
         .then((responseData) => {
@@ -42,7 +42,7 @@ export async function getComments() {
         });
 
 };
-
+//Функция запроса с использованием функ апи и с обработкой ошибок для публикации  
 export const postComments = () => {
     const nameInputElement = document.getElementById("name-input");
     const reviewInputElement = document.getElementById("text-input");

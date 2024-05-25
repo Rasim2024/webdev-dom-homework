@@ -36,8 +36,8 @@ export function renderComments() {
   const contentHtml = () => {
     
     const btnLogin = `
-    <p class="render-login-btn style-autorisation" >  Чтобы добавить комментарий, 
-    <a id="render-login-btn">авторизуйтесь</a> </p>`;
+    <p  >  Чтобы добавить комментарий, 
+    <a id="render-login-btn" class="authorization">авторизуйтесь</a> </p>`;
 
     if (!token)
       return `<ul id="list" class="comments">${listElement.innerHTML}</ul>
@@ -57,7 +57,7 @@ export function renderComments() {
 
   appHtml.innerHTML = contentHtml();
   
-
+// функция выхода авторизованного пользователя
   function exit() {
     const exitButton = document.getElementById("exit-button");
     exitButton?.addEventListener("click", () => {
@@ -82,9 +82,9 @@ export function renderComments() {
   if (token) {
     exit();
    
-  controlLikes();
-  publish();
-  replyComments();
+  controlLikes();    // Функция Лайков
+  publish();           // Функция публикация постов
+  replyComments();         // Функция ответа на комментарии 
   }else {
     setLoginBtn();
   }

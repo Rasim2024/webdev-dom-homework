@@ -15,7 +15,7 @@ export const setToken = (newToken) => {
 export const getToken = () => {
   return token;
 };
-
+// функция обращения к серверу для загрузки листа комментов
 export async function apiGetComments() {
     return fetch(baseURL, {
         method: "GET",
@@ -39,7 +39,7 @@ export async function apiGetComments() {
     
        
 };
-
+// Функция обращения к серверу для публикации поста
 export async function apiPostComments(nameInputElement, reviewInputElement) {
    return fetch(baseURL, {
         method: "POST",
@@ -69,6 +69,7 @@ export async function apiPostComments(nameInputElement, reviewInputElement) {
         });
 };
 
+// функция обращения к серверу для авторизации 
 export async function  loginPost({ login, password }) {
     return fetch(urlApiLogin, {
       method: "POST",
@@ -83,7 +84,7 @@ export async function  loginPost({ login, password }) {
           return response.json();
         }
         if (response.status === 400) {
-          throw new Error("Некорректные логинпароль 400");
+          throw new Error("неправильный логин или пароль 400");
         }
         if (response.status === 500) {
           return Promise.reject("ошибка сервера");
@@ -96,6 +97,7 @@ export async function  loginPost({ login, password }) {
       });
   };
 
+//   функция обращения к серверу для регистрации 
   export async function  register({ name, login, password }) {
     console.log(name, login, password);
     return fetch(urlApiuser, {
@@ -113,7 +115,7 @@ export async function  loginPost({ login, password }) {
           return response.json();
         }
         if (response.status === 400) {
-          throw new Error("Некорректные логинпароль 400");
+          throw new Error("пользователь с таким логином уже сущетсвует 400");
         }
         if (response.status === 500) {
           return Promise.reject("ошибка сервера");
