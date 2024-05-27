@@ -1,8 +1,7 @@
-import { listElement, user  } from "./main.js";
-import { publish } from "./button.js";
+import { user  } from "./main.js";
 import { controlLikes } from "./likes.js";
-import { database, postComments } from "./request.js";
-import { setToken, token, getToken } from "./api.js";
+import { database,  publish } from "./request.js";
+import { listElement, token, getToken } from "./api.js";
 import { renderLoginForm } from "./renderLoginForm.js";
 import { replyComments } from "./reply-comments.js";
 
@@ -81,16 +80,19 @@ export function renderComments() {
  
   if (token) {
     exit();
-   
+    
   controlLikes();    // Функция Лайков
+  replyComments();         // Функция ответа на комментарии
   publish();           // Функция публикация постов
-  replyComments();         // Функция ответа на комментарии 
+   
   }else {
     setLoginBtn();
   }
   
   
-
-  
 };
+
+function renderPublishForm () {
+  
+}
 

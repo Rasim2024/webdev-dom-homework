@@ -2,7 +2,7 @@ import { setToken, } from "./api.js";
 import { setUser } from "./main.js";
 import { renderLoginForm, } from "./renderLoginForm.js";
 import { register } from "./api.js";
-import { successfully } from "./helpers.js";
+import { safeMode, successfully } from "./helpers.js";
 
 
 // Рендер функция страницы регистрации 
@@ -36,15 +36,14 @@ export const renderRegisterForm = () => {
         const loginInputElement = document.getElementById("login-input");
         const passwordInputElement = document.getElementById("password-input");
         if (!loginInputElement.value || !passwordInputElement.value || !nameInnputElement.value) {
-            
-            alert("Проверьте оба поля  на заполненность");
+            alert("Заполните все поля");
             return
 
         }
         register({ //Функция регистрации пользователя
-            name: nameInnputElement.value,
-            login: loginInputElement.value,
-            password: passwordInputElement.value,
+            name: safeMode(nameInnputElement.value.trim()),
+            login: safeMode(loginInputElement.value.trim()),
+            password: safeMode(passwordInputElement.value.trim()),
         })
             .then((responseData) => {
                 setUser(responseData.user.name);

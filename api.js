@@ -1,8 +1,14 @@
 
-import {  baseURL,urlApiLogin, urlApiuser } from "./main.js";
-
 import { safeMode } from "./helpers.js";
 
+
+
+
+export let listElement = document.getElementById('list');
+export const baseURL = new URL("https://wedev-api.sky.pro/api/v2/:rasim-musaev/comments");
+export const urlApiLogin = new URL("https://wedev-api.sky.pro/api/user/login")
+export const urlApiuser = new URL("https://wedev-api.sky.pro/api/user");
+export const loaderElement = document.getElementById('preloader')
 
 
 
@@ -15,7 +21,7 @@ export const setToken = (newToken) => {
 export const getToken = () => {
   return token;
 };
-// функция обращения к серверу для загрузки листа комментов
+// функция обращения к серверу для загрузки листа
 export async function apiGetComments() {
     return fetch(baseURL, {
         method: "GET",

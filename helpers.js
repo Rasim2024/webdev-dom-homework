@@ -1,7 +1,7 @@
 // Защита вода 
 
 export const safeMode = (htmlString) => {
-    return htmlString.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("&", "&amp;").replaceAll('"', "&quot;");
+    return htmlString.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
   };
 
 // Функция уведомления пользователя 
