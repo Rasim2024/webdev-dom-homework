@@ -1,6 +1,7 @@
 import { database } from "./request.js";
 
 
+
 export const replyComments = () => {
     
     const answerComments = document.querySelectorAll(".comment");

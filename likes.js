@@ -1,5 +1,5 @@
 import { database } from "./request.js";
-import { renderComments } from "./render.js";
+import {  renderComments, saveFormData, onRender } from "./render.js";
 import { token } from "./api.js";
 
 
@@ -9,7 +9,7 @@ export function controlLikes() {
         likeButtonElement.addEventListener('click', (event) => {
             event.stopPropagation();
             if (!token) {
-                // alert("autorize");
+                alert("autorize");
                 return;
               }
             const index = likeButtonElement.dataset.index
@@ -20,8 +20,10 @@ export function controlLikes() {
                 database[index].isLiked = !database[index].isLiked
                 database[index].likeCount++
             };
+            saveFormData(); // сохранения данных при отправке формы
+            // console.log(localStorage.getItem("comment"));
             renderComments();
-            
+            onRender();  // После рендер заполняем форму данными из localStorag
 
         });
 

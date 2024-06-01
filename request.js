@@ -1,4 +1,4 @@
-import { renderComments } from "./render.js";
+import { renderComments,  } from "./render.js";
 import { apiGetComments, token, apiPostComments, loaderElement } from "./api.js";
 import { safeMode } from "./helpers.js";
 
@@ -22,6 +22,7 @@ export async function getComments() {
             });
             database = appComments;
             renderComments();
+            
 
         })
         .catch((error) => {
@@ -45,7 +46,7 @@ export async function getComments() {
 //Функция запроса с использованием функ апи и с обработкой ошибок для публикации  
 export const postComments = () => {
     const nameInputElement = document.getElementById("name-input");
-    const reviewInputElement = document.getElementById("text-input");
+    // const reviewInputElement = document.getElementById("text-input");
     const publishButton = document.getElementById("add-form-button");
     apiPostComments(nameInputElement, reviewInputElement)
         .then(() => {
@@ -83,10 +84,9 @@ export const postComments = () => {
 // console.log(publishButton);
 export function publish() {
     const publishButton = document.getElementById("add-form-button");
-
-    publishButton.addEventListener("click", () => {
+        publishButton.addEventListener("click", () => {
         const nameInputElement = document.getElementById("name-input");
-        const reviewInputElement = document.getElementById("text-input");
+        
         let errorInName = nameInputElement.value.length <= 2;
         let errorInComment = reviewInputElement.value.length < 2;
         errorInName = safeMode(nameInputElement.value.trim());   //используем функцию trim(), чтобы удалить пробелы из начала и конца введенных значений. 

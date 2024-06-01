@@ -1,9 +1,10 @@
 import { user  } from "./main.js";
 import { controlLikes } from "./likes.js";
-import { database,  publish } from "./request.js";
+import { database,  publish,  } from "./request.js";
 import { listElement, token, getToken } from "./api.js";
 import { renderLoginForm } from "./renderLoginForm.js";
 import { replyComments } from "./reply-comments.js";
+
 
 
 
@@ -56,43 +57,67 @@ export function renderComments() {
 
   appHtml.innerHTML = contentHtml();
   
-// функция выхода авторизованного пользователя
-  function exit() {
-    const exitButton = document.getElementById("exit-button");
-    exitButton?.addEventListener("click", () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      renderLoginForm();
-    });
+//Переход к форме авторизации по клику
+const setLoginBtn = () => {
+  const buttonLoginElement = document.getElementById("render-login-btn");
+  if (!buttonLoginElement) {
+    return;
   }
+  buttonLoginElement.addEventListener("click", (event) => {
+    event.preventDefault();
+    renderLoginForm();
+  });
+};
 
-  //Переход к форме авторизации по клику
-  const setLoginBtn = () => {
-    const buttonLoginElement = document.getElementById("render-login-btn");
-    if (!buttonLoginElement) {
-      return;
-    }
-    buttonLoginElement.addEventListener("click", (event) => {
-      event.preventDefault();
-      renderLoginForm();
-    });
-  };
- 
-  if (token) {
-    exit();
-    
-  controlLikes();    // Функция Лайков
-  replyComments();         // Функция ответа на комментарии
-  publish();           // Функция публикация постов
+if (token) {
+  exit();
    
-  }else {
-    setLoginBtn();
-  }
-  
+controlLikes();    // Функция Лайков
+
+replyComments();         // Функция ответа на комментарии
+publish();           // Функция публикация постов
+ 
+}else {
+  setLoginBtn();
+}
+
+
   
 };
 
-function renderPublishForm () {
+// функция выхода авторизованного пользователя
+function exit() {
+  const exitButton = document.getElementById("exit-button");
+  exitButton?.addEventListener("click", () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    renderLoginForm();
+  });
+};
+// сохранения данных 
+
+export function saveFormData() {
   
-}
+const textArea = document.getElementById("text-input");
+
+  localStorage.setItem("comment", textArea.value);
+};
+
+
+ export function onRender() {
+  const textArea = document.getElementById("text-input");
+  if (localStorage.getItem("comment")) {
+    textArea.value = localStorage.getItem("comment");
+  }
+};
+
+
+  
+
+
+
+
+
+
+
 

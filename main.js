@@ -1,3 +1,4 @@
+import { onRender, saveFormData } from "./render.js";
 import { getComments } from "./request.js";
 
 
@@ -14,7 +15,6 @@ export const setUser = (newUser) => {
 // Выводим новый комментарий из сервера на страницу
 
 getComments(); 
-
 
 
 
