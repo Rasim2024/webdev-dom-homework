@@ -35,7 +35,7 @@ export const renderRegisterForm = () => {
         const nameInnputElement = document.getElementById("name-input");
         const loginInputElement = document.getElementById("login-input");
         const passwordInputElement = document.getElementById("password-input");
-        if (!loginInputElement.value || !passwordInputElement.value || !nameInnputElement.value) {
+        if (loginInputElement.value.trim() === "" || passwordInputElement.value.trim() === ""  || nameInnputElement.value.trim() === "" ) {
             alert("Заполните все поля");
             return
 

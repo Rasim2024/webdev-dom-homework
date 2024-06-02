@@ -1,7 +1,8 @@
 import { renderComments,  } from "./render.js";
-import { apiGetComments, token, apiPostComments, loaderElement } from "./api.js";
+import { apiGetComments, token, apiPostComments } from "./api.js";
 import { safeMode } from "./helpers.js";
 
+const loaderElement = document.getElementById('preloader')
 
 
 
@@ -46,7 +47,7 @@ export async function getComments() {
 //Функция запроса с использованием функ апи и с обработкой ошибок для публикации  
 export const postComments = () => {
     const nameInputElement = document.getElementById("name-input");
-    // const reviewInputElement = document.getElementById("text-input");
+    const reviewInputElement = document.getElementById("text-input");
     const publishButton = document.getElementById("add-form-button");
     apiPostComments(nameInputElement, reviewInputElement)
         .then(() => {
@@ -86,7 +87,7 @@ export function publish() {
     const publishButton = document.getElementById("add-form-button");
         publishButton.addEventListener("click", () => {
         const nameInputElement = document.getElementById("name-input");
-        
+        const reviewInputElement = document.getElementById('text-input');        
         let errorInName = nameInputElement.value.length <= 2;
         let errorInComment = reviewInputElement.value.length < 2;
         errorInName = safeMode(nameInputElement.value.trim());   //используем функцию trim(), чтобы удалить пробелы из начала и конца введенных значений. 

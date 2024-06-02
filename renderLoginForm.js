@@ -38,7 +38,7 @@ export const renderLoginForm = () => {
 
     buttonLoginElement.addEventListener("click", (event) => {
         event.preventDefault();
-        if (!loginInputElement.value || !passwordInputElement.value) {
+        if (loginInputElement.value.trim() === "" || passwordInputElement.value.trim() === "") {
             alert("Проверьте оба поля  на заполненность");
             return;
         }
