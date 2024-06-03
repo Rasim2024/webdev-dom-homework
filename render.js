@@ -44,7 +44,7 @@ export function renderComments() {
      ${btnLogin}`;
     return `<ul id="list" class="comments">${listElement.innerHTML}</ul>
     <div id="add-form" class="add-form">
-      <input id="name-input" value=${user.name}  readonly type="text" class="add-form-name" placeholder="Введите ваше имя" />
+      <input id="name-input" value="${user.name}"  readonly type="text" class="add-form-name" placeholder="Введите ваше имя" />
       <textarea id="text-input" type="textArea" class="add-form-text" placeholder="Введите ваш коментарий"
         rows="4"></textarea>
       <div class="add-form-row">
