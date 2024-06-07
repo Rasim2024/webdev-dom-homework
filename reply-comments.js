@@ -1,6 +1,9 @@
 import { database } from "./request.js";
 
+
+
 export const replyComments = () => {
+    
     const answerComments = document.querySelectorAll(".comment");
     for (const answer of answerComments) {
         answer.addEventListener('click', (event) => {

@@ -1,14 +1,14 @@
-import { renderComments } from "./render.js";
-import { apiGetComments } from "./api.js";
-import { buttonElement } from "./main.js";
-import { loaderElement } from "./main.js";
-import { apiPostComments } from "./api.js";
-import { nameInputElement } from "./main.js";
-import { reviewInputElement } from "./main.js";
+import { renderComments,  } from "./render.js";
+import { apiGetComments, token, apiPostComments } from "./api.js";
+import { safeMode } from "./helpers.js";
+
+const loaderElement = document.getElementById('preloader')
+
 
 
 export let database = [];
-export function getComments() {
+//Функция запроса с использованием функ апи и с обработкой ошибок для вывода на экран комментов 
+export async function getComments() {
     apiGetComments()
         .then((responseData) => {
             loaderElement.remove(); //Удаляем лоадер после загрузки данных
@@ -23,11 +23,15 @@ export function getComments() {
             });
             database = appComments;
             renderComments();
+            
 
         })
         .catch((error) => {
-            buttonElement.disabled = false;
-            buttonElement.textContent = "Написать";
+            if (token) {
+                const publishButton = document.getElementById("add-form-button");
+                publishButton.disabled = false;
+                publishButton.textContent = "Написать";
+            }
             if (error.message === "Сервер упал") {
                 alert("Кажется, что-то пошло не так, попробуй позже");
 
@@ -40,24 +44,27 @@ export function getComments() {
         });
 
 };
-
+//Функция запроса с использованием функ апи и с обработкой ошибок для публикации  
 export const postComments = () => {
-    apiPostComments()
+    const nameInputElement = document.getElementById("name-input");
+    const reviewInputElement = document.getElementById("text-input");
+    const publishButton = document.getElementById("add-form-button");
+    apiPostComments(nameInputElement, reviewInputElement)
         .then(() => {
             // Выводим новый комментарий из сервера на страницу
             return getComments();
         })
         .then(() => {
-            buttonElement.disabled = false
-            buttonElement.textContent = 'Написать';
+            publishButton.disabled = false
+            publishButton.textContent = 'Написать';
 
             nameInputElement.value = ""
             reviewInputElement.value = ""
 
         })
         .catch((error) => {
-            buttonElement.disabled = false;
-            buttonElement.textContent = "Написать";
+            publishButton.disabled = false;
+            publishButton.textContent = "Написать";
             if (error.message === "Неверный запрос") {
                 alert("Имя и комментарий должны быть не короче 3 символов");
             } else if (error.message === "Сервер упал") {
@@ -70,4 +77,36 @@ export const postComments = () => {
             console.warn(error);
 
         });
+};
+
+
+
+
+// console.log(publishButton);
+export function publish() {
+    const publishButton = document.getElementById("add-form-button");
+        publishButton.addEventListener("click", () => {
+        const nameInputElement = document.getElementById("name-input");
+        const reviewInputElement = document.getElementById('text-input');        
+        let errorInName = nameInputElement.value.length <= 2;
+        let errorInComment = reviewInputElement.value.length < 2;
+        errorInName = safeMode(nameInputElement.value.trim());   //используем функцию trim(), чтобы удалить пробелы из начала и конца введенных значений. 
+        errorInComment = safeMode(reviewInputElement.value.trim()); //используем функцию trim(), чтобы удалить пробелы из начала и конца введенных значений.
+
+
+        nameInputElement.style.backgroundColor = "white";
+        reviewInputElement.style.backgroundColor = "white";
+        if (errorInName === '' || errorInComment === '') {  // проверяем, не являются ли поля пустыми после удаления пробелов. Если хотя бы одно поле пустое, выводится сообщение об ошибке и запрос не отправляется.
+            nameInputElement.style.backgroundColor = "red";
+            reviewInputElement.style.backgroundColor = "red";
+            alert('Пожалуйста, заполните все поля');
+            return;
+        }
+        publishButton.disabled = true;
+        publishButton.textContent = 'Комментарий добавляется...';
+        // Сохранение комментариев на сервер
+
+        postComments();
+
+    });
 };
