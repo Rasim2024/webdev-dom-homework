@@ -1,6 +1,7 @@
 import { renderComments,  } from "./render.js";
 import { apiGetComments, token, apiPostComments } from "./api.js";
 import { safeMode } from "./helpers.js";
+import { format } from "date-fns";
 
 const loaderElement = document.getElementById('preloader')
 
@@ -13,9 +14,10 @@ export async function getComments() {
         .then((responseData) => {
             loaderElement.remove(); //Удаляем лоадер после загрузки данных
             const appComments = responseData.comments.map((comment) => {
+                const createDate = format(new Date(comment.date), 'yyyy-MM-dd hh.mm.ss');
                 return {
                     name: comment.author.name,
-                    time: new Date(comment.date).toLocaleDateString('ru-RU', { year: '2-digit', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                    time: createDate,
                     review: comment.text,
                     likeCount: comment.likes,
                     isLiked: false
